@@ -25,12 +25,18 @@
       position: relative;
     }
 
-    h1 {
-      font-family: 'Pacifico', cursive;
-      font-size: 2.5em;
-      margin-bottom: 10px;
-      color: #388e3c;
-    }
+h1 {
+  font-family: 'Pacifico', cursive;
+  font-size: 2em;
+  margin-bottom: 10px;
+  color: #388e3c;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.5em;
+  }
+}
 
     .heart {
       font-size: 60px;
@@ -149,8 +155,23 @@
     }
 
 @media (max-width: 600px) {
-  .days {
-    font-size: 1.8em;
+  .photo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .heart {
+    font-size: 40px;
+    margin: 0 5px;
+  }
+
+  .name {
+    font-size: 1em;
+  }
+
+  .names-row {
+    gap: 30px;
+  }
   }
 
   .since-date {
@@ -172,10 +193,29 @@
     height: 120px;
   }
 
-  .name {
-    font-size: 1em;
-  }
+.couple-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: nowrap;
+  margin-bottom: 10px;
+}
 
+.names-row {
+  display: flex;
+  justify-content: center;
+  gap: 70px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  color: #33691e;
+}
+
+.name {
+  font-size: 1.1em;
+  font-weight: 600;
+  text-align: center;
+}
   .quote {
     font-size: 0.95em;
     padding: 0 10px;
@@ -199,9 +239,7 @@
 <body>
   <!-- Nhạc nền -->
   <audio id="bgMusic" loop autoplay>
-    <!-- ⚠️ ZingMP3 không hỗ trợ nhúng trực tiếp từ URL bên ngoài -->
     <source src="Chung_ta_cua_hien_tai_-_Sơn_Tùng_MTP_bản_chuẩn_KLICKAUD.mp3" type="audio/mpeg">
-    Trình duyệt không hỗ trợ audio.
   </audio>
 
   <div class="container">
@@ -210,19 +248,17 @@
     <div class="since-date">Tính từ ngày 18 tháng 08 năm 2024</div>
 
 
-    <div class="couple">
-      <div class="person">
-        <img src="dung.jpg" alt="Nguyễn Tấn Dũng" class="photo" />
-        <div class="name">Nguyễn Tấn Dũng</div>
-      </div>
+<div class="couple-row">
+  <img src="dung.jpg" alt="Nguyễn Tấn Dũng" class="photo" />
+  <div class="heart">💗</div>
+  <img src="yen.jpg" alt="Lê Lâm Hải Yến" class="photo" />
+</div>
 
-      <div class="heart">💗</div>
+<div class="names-row">
+  <div class="name">Nguyễn Tấn Dũng</div>
+  <div class="name">Lê Lâm Hải Yến</div>
+</div>
 
-      <div class="person">
-        <img src="yen.jpg" alt="Lê Lâm Hải Yến" class="photo" />
-        <div class="name">Lê Lâm Hải Yến</div>
-      </div>
-    </div>
 
     <div class="quote" id="loveQuote">Yêu là cùng nhau đi đến cuối con đường 💑</div>
   </div>
