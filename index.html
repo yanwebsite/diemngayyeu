@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Đếm Ngày Yêu</title>
+
+  <!-- Font chữ lãng mạn -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #d0f0c0, #ffffff);
+      font-family: 'Quicksand', sans-serif;
+      color: #2e7d32;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      color: #388e3c;
+    }
+
+    .heart {
+      font-size: 60px;
+      color: #ff5a5f;
+      animation: pulse 1s infinite ease-in-out;
+      margin: 0 10px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.8; }
+    }
+
+    .days {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin: 20px 0;
+      color: #1b5e20;
+    }
+
+    .couple {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .person {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .photo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid #81c784;
+      box-shadow: 0 0 20px rgba(100, 255, 100, 0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .photo:hover {
+      transform: scale(1.05);
+    }
+
+    .name {
+      margin-top: 10px;
+      font-size: 1.2em;
+      font-weight: 600;
+      color: #33691e;
+      text-align: center;
+    }
+
+    .bubble-heart {
+      position: absolute;
+      bottom: -40px;
+      font-size: 24px;
+      color: rgba(255, 105, 135, 0.4);
+      animation: floatBubble 8s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes floatBubble {
+      0% {
+        transform: translateY(0) scale(1) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh) scale(1.5) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .floating-heart {
+      position: absolute;
+      color: #ff69b4;
+      font-size: 24px;
+      animation: floatAround linear infinite;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    @keyframes floatAround {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(50px, -100px) rotate(45deg);
+      }
+      50% {
+        transform: translate(-80px, -50px) rotate(90deg);
+      }
+      75% {
+        transform: translate(100px, 50px) rotate(135deg);
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg);
+      }
+    }
+
+    .quote {
+      font-style: italic;
+      margin-top: 10px;
+      font-size: 1.1em;
+      color: #4e342e;
+      padding: 0 20px;
+    }
+
+    audio {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .days { font-size: 2em; }
+      .couple { flex-direction: column; gap: 20px; }
+    }
+    .since-date {
+  font-size: 0.9em;
+  color: #388e3c;
+  opacity: 0.8;
+  margin-top: -10px;
+  margin-bottom: 20px;
+}
+
+  </style>
+</head>
+<body>
+  <!-- Nhạc nền -->
+  <audio id="bgMusic" loop autoplay>
+    <!-- ⚠️ ZingMP3 không hỗ trợ nhúng trực tiếp từ URL bên ngoài -->
+    <source src="Chung_ta_cua_hien_tai_-_Sơn_Tùng_MTP_bản_chuẩn_KLICKAUD.mp3" type="audio/mpeg">
+    Trình duyệt không hỗ trợ audio.
+  </audio>
+
+  <div class="container">
+    <h1>Chúng Mình Đã Yêu Nhau</h1>
+    <div class="days" id="daysCount">0 ngày</div>
+    <div class="since-date">Tính từ ngày 18 tháng 08 năm 2024</div>
+
+
+    <div class="couple">
+      <div class="person">
+        <img src="dung.jpg" alt="Nguyễn Tấn Dũng" class="photo" />
+        <div class="name">Nguyễn Tấn Dũng</div>
+      </div>
+
+      <div class="heart">💗</div>
+
+      <div class="person">
+        <img src="yen.jpg" alt="Lê Lâm Hải Yến" class="photo" />
+        <div class="name">Lê Lâm Hải Yến</div>
+      </div>
+    </div>
+
+    <div class="quote" id="loveQuote">Yêu là cùng nhau đi đến cuối con đường 💑</div>
+  </div>
+
+  <script>
+    // Giờ Việt Nam
+    function getVietnamNow() {
+      const now = new Date();
+      const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+      return new Date(utc + 7 * 3600000);
+    }
+
+    // Đếm ngày yêu
+    const startDate = new Date("2024-08-18T00:00:00+07:00");
+    const today = getVietnamNow();
+    const timeDiff = today - startDate;
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    document.getElementById("daysCount").textContent = `💚 ${days} ngày 💚`;
+
+    // Danh sách câu nói lãng mạn
+    const quotes = [
+      "Yêu là cùng nhau đi đến cuối con đường 💑",
+      "Mỗi ngày bên bạn là một ngày hạnh phúc 💖",
+      "Cảm ơn vì đã luôn ở bên mình hẹ hẹ hẹ 🌸",
+      "Yến là Ck, còn Dũng là Vk 🌈",
+      "Làm gì cũng được, miễn là làm cùng nhau 💘",
+      "Tình yêu bắt đầu bằng một ánh nhìn, và không bao giờ kết thúc ✨",
+      "Bạn là giấc mơ mà mình không muốn tỉnh lại 💭",
+      "Bên bạn, mọi thứ đều trở nên đẹp hơn 💞"
+    ];
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById("loveQuote").textContent = randomQuote;
+
+    // Auto play nhạc sau tương tác
+    const bgMusic = document.getElementById('bgMusic');
+    document.body.addEventListener('click', () => {
+      bgMusic.play().catch(() => {});
+    }, { once: true });
+
+    // Bong bóng trái tim bay lên
+    for (let i = 0; i < 30; i++) {
+      const heart = document.createElement("div");
+      heart.className = "bubble-heart";
+      heart.innerHTML = "💖";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDelay = Math.random() * 8 + "s";
+      heart.style.fontSize = 20 + Math.random() * 20 + "px";
+      document.body.appendChild(heart);
+    }
+
+    // Trái tim bay xung quanh
+    for (let i = 0; i < 20; i++) {
+      const heart = document.createElement("div");
+      heart.className = "floating-heart";
+      heart.innerHTML = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.top = Math.random() * 100 + "vh";
+      heart.style.fontSize = 16 + Math.random() * 24 + "px";
+      heart.style.animationDuration = 5 + Math.random() * 5 + "s";
+      heart.style.animationDelay = Math.random() * 5 + "s";
+      document.body.appendChild(heart);
+    }
+  </script>
+</body>
+</html>
